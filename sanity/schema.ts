@@ -387,10 +387,15 @@ const comparison = {
               name: "values",
               title: "Values",
               type: "object",
-              fields: [],
-              options: {
-                // Can be extended with specific keys if needed
-              },
+              fields: [
+                { name: "price", title: "Price", type: "string" },
+                { name: "rating", title: "Rating", type: "number" },
+                { name: "effectiveness", title: "Effectiveness", type: "string" },
+                { name: "sideEffects", title: "Side Effects", type: "string" },
+                { name: "ingredients", title: "Key Ingredients", type: "string" },
+                { name: "value", title: "Value for Money", type: "string" },
+                { name: "ease", title: "Ease of Use", type: "string" },
+              ],
             },
           ],
         },
