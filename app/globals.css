@@ -1,0 +1,169 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 210 100% 35%; /* Medical blue */
+    --primary-foreground: 210 40% 98%;
+    --secondary: 199 89% 48%; /* Secondary blue */
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 199 89% 48%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 210 100% 35%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 210 100% 35%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 224.3 76.3% 48%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans",
+      "Helvetica Neue", sans-serif;
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-semibold tracking-tight;
+  }
+  h1 {
+    @apply text-3xl md:text-4xl;
+  }
+  h2 {
+    @apply text-2xl md:text-3xl;
+  }
+  h3 {
+    @apply text-xl md:text-2xl;
+  }
+}
+
+.prose {
+  @apply max-w-none;
+}
+
+.prose a {
+  @apply text-primary hover:underline;
+}
+
+.prose h2 {
+  @apply text-2xl font-bold mt-8 mb-4 text-primary;
+}
+
+.prose h3 {
+  @apply text-xl font-bold mt-6 mb-3 text-primary;
+}
+
+.prose p {
+  @apply mb-4;
+}
+
+.prose ul {
+  @apply list-disc pl-5 mb-4;
+}
+
+.prose ol {
+  @apply list-decimal pl-5 mb-4;
+}
+
+.prose blockquote {
+  @apply border-l-4 border-primary/30 pl-4 italic;
+}
+
+/* Medical-style components */
+.medical-card {
+  @apply bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow overflow-hidden;
+}
+
+.medical-header {
+  @apply bg-primary text-white py-2 px-4 font-medium;
+}
+
+.medical-tag {
+  @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800;
+}
+
+.medical-warning {
+  @apply bg-amber-50 border-l-4 border-amber-400 p-4 text-amber-800;
+}
+
+.medical-info {
+  @apply bg-blue-50 border-l-4 border-blue-400 p-4 text-blue-800;
+}
+
+.medical-success {
+  @apply bg-green-50 border-l-4 border-green-400 p-4 text-green-800;
+}
+
+.medical-danger {
+  @apply bg-red-50 border-l-4 border-red-400 p-4 text-red-800;
+}
+
+/* WebMD-like breadcrumb */
+.medical-breadcrumb {
+  @apply flex items-center text-sm text-gray-600 mb-4;
+}
+
+.medical-breadcrumb-item {
+  @apply hover:text-primary;
+}
+
+.medical-breadcrumb-separator {
+  @apply mx-2 text-gray-400;
+}
+
+/* WebMD-like table */
+.medical-table {
+  @apply w-full border-collapse;
+}
+
+.medical-table th {
+  @apply bg-gray-100 text-left p-3 font-medium text-gray-700 border border-gray-200;
+}
+
+.medical-table td {
+  @apply p-3 border border-gray-200;
+}
+
+.medical-table tr:nth-child(even) {
+  @apply bg-gray-50;
+}

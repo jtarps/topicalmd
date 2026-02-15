@@ -1,0 +1,17 @@
+# Python dependencies for content generation scripts
+
+# OpenAI API client
+openai>=1.0.0
+
+# Environment variable management
+python-dotenv>=1.0.0
+
+# HTTP requests
+requests>=2.31.0
+
+# String slugification
+python-slugify>=8.0.0
+
+# Data manipulation (optional, for future Google Sheets integration)
+pandas>=2.0.0
+
