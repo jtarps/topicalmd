@@ -147,6 +147,26 @@ const product = {
       type: "url",
     },
     {
+      name: "asin",
+      title: "Amazon ASIN",
+      type: "string",
+    },
+    {
+      name: "activeIngredient",
+      title: "Active Ingredient",
+      type: "string",
+    },
+    {
+      name: "mechanism",
+      title: "Mechanism of Action",
+      type: "string",
+    },
+    {
+      name: "category",
+      title: "Category",
+      type: "string",
+    },
+    {
       name: "useCases",
       title: "Use Cases",
       type: "array",
@@ -177,6 +197,11 @@ const product = {
       name: "isGeneric",
       title: "Generic",
       type: "boolean",
+    },
+    {
+      name: "notes",
+      title: "Notes",
+      type: "text",
     },
     {
       name: "region",
