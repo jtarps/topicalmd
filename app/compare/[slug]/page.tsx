@@ -1,5 +1,5 @@
 import { getComparison, getAllComparisonSlugs } from "@/lib/sanity"
-import { PortableText } from "@portabletext/react"
+import PortableTextRenderer from "@/components/portable-text-renderer"
 import Image from "next/image"
 import { urlForImage } from "@/lib/sanity-image"
 import { notFound } from "next/navigation"
@@ -61,9 +61,7 @@ export default async function ComparisonPage({ params }: Props) {
           )}
         </header>
 
-        <div className="prose max-w-none mb-12">
-          <PortableText value={comparison.introduction} />
-        </div>
+        <PortableTextRenderer value={comparison.introduction} className="prose max-w-none mb-12" />
 
         {comparison.products && comparison.products.length > 0 && (
           <section className="mb-12">
@@ -88,9 +86,7 @@ export default async function ComparisonPage({ params }: Props) {
           </section>
         )}
 
-        <div className="prose max-w-none mb-12">
-          <PortableText value={comparison.content} />
-        </div>
+        <PortableTextRenderer value={comparison.content} className="prose max-w-none mb-12" />
 
         {comparison.winner && (
           <section className="mb-12 p-6 bg-green-50 rounded-lg border border-green-200">

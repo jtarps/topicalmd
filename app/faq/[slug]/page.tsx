@@ -1,5 +1,5 @@
 import { getFaq, getAllFaqSlugs } from "@/lib/sanity"
-import { PortableText } from "@portabletext/react"
+import PortableTextRenderer from "@/components/portable-text-renderer"
 import { notFound } from "next/navigation"
 import type { Metadata } from "next"
 import RelatedContent from "@/components/related-content"
@@ -66,9 +66,7 @@ export default async function FaqPage({ params }: Props) {
           {faq.excerpt && <p className="text-xl text-gray-600 mb-6">{faq.excerpt}</p>}
         </header>
 
-        <div className="prose max-w-none mb-12">
-          <PortableText value={faq.answer} />
-        </div>
+        <PortableTextRenderer value={faq.answer} className="prose max-w-none mb-12" />
 
         {faq.sources && faq.sources.length > 0 && (
           <section className="mb-12">

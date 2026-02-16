@@ -299,6 +299,71 @@ export async function getFaq(slug: string) {
   }
 }
 
+// Condition category pages - find use cases by category slug
+export async function getUseCasesByCategory(categorySlug: string) {
+  try {
+    return client.fetch(
+      `
+      {
+        "useCases": *[_type == "useCase" && $categorySlug in categories] | order(publishedAt desc) {
+          _id,
+          title,
+          "slug": slug.current,
+          excerpt,
+          mainImage,
+          categories
+        },
+        "relatedProducts": *[_type == "product" && $categorySlug in useCases[]->categories] {
+          _id,
+          name,
+          image,
+          price,
+          affiliateLink,
+          brand,
+          "slug": *[_type == "review" && references(^._id)][0].slug.current
+        },
+        "relatedReviews": *[_type == "review" && $categorySlug in product->useCases[]->categories] | order(publishedAt desc) [0...6] {
+          _id,
+          title,
+          "slug": slug.current,
+          excerpt,
+          mainImage,
+          rating
+        }
+      }
+    `,
+      { categorySlug },
+    )
+  } catch (error) {
+    console.error(`Error fetching use cases for category ${categorySlug}:`, error)
+    return { useCases: [], relatedProducts: [], relatedReviews: [] }
+  }
+}
+
+// Get all products for comparison tool
+export async function getAllProducts() {
+  try {
+    return client.fetch(`
+      *[_type == "product"] | order(name asc) {
+        _id,
+        name,
+        image,
+        brand,
+        price,
+        size,
+        form,
+        activeIngredient,
+        affiliateLink,
+        OTC,
+        "ingredients": ingredients[]->{ _id, title, "slug": slug.current }
+      }
+    `)
+  } catch (error) {
+    console.error("Error fetching all products:", error)
+    return []
+  }
+}
+
 // Get all content for reviews page
 export async function getAllReviews() {
   try {

@@ -1,5 +1,5 @@
 import { getIngredient, getAllIngredientSlugs } from "@/lib/sanity"
-import { PortableText } from "@portabletext/react"
+import PortableTextRenderer from "@/components/portable-text-renderer"
 import Image from "next/image"
 import { urlForImage } from "@/lib/sanity-image"
 import { notFound } from "next/navigation"
@@ -61,9 +61,7 @@ export default async function IngredientPage({ params }: Props) {
 
         <div className="grid md:grid-cols-3 gap-8">
           <div className="md:col-span-2">
-            <div className="prose max-w-none">
-              <PortableText value={ingredient.content} />
-            </div>
+            <PortableTextRenderer value={ingredient.content} />
           </div>
 
           <aside className="md:col-span-1">

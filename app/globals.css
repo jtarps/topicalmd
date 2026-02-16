@@ -167,3 +167,40 @@
 .medical-table tr:nth-child(even) {
   @apply bg-gray-50;
 }
+
+/* Portable text tables (pipe-separated markdown tables) */
+.portable-table-wrapper {
+  @apply overflow-x-auto rounded-lg border border-gray-200;
+}
+
+.portable-table {
+  @apply w-full border-collapse text-sm;
+}
+
+.portable-table th {
+  @apply bg-primary/5 text-left p-3 font-semibold text-gray-800 border-b-2 border-primary/20;
+}
+
+.portable-table td {
+  @apply p-3 border-b border-gray-100;
+}
+
+.portable-table tbody tr:nth-child(even) {
+  @apply bg-gray-50/50;
+}
+
+.portable-table tbody tr:hover {
+  @apply bg-blue-50/40;
+}
+
+/* Enhanced prose list styling */
+.prose ul ul,
+.prose ol ol,
+.prose ul ol,
+.prose ol ul {
+  @apply mt-1.5 mb-0;
+}
+
+.prose li > p {
+  @apply mb-1;
+}

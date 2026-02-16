@@ -1,5 +1,5 @@
 import { getUseCase, getAllUseCaseSlugs } from "@/lib/sanity"
-import { PortableText } from "@portabletext/react"
+import PortableTextRenderer from "@/components/portable-text-renderer"
 import Image from "next/image"
 import { urlForImage } from "@/lib/sanity-image"
 import { notFound } from "next/navigation"
@@ -60,9 +60,7 @@ export default async function UseCasePage({ params }: Props) {
           )}
         </header>
 
-        <div className="prose max-w-none mb-12">
-          <PortableText value={useCase.introduction} />
-        </div>
+        <PortableTextRenderer value={useCase.introduction} className="prose max-w-none mb-12" />
 
         {useCase.recommendedProducts && useCase.recommendedProducts.length > 0 && (
           <section className="mb-12">
@@ -75,9 +73,7 @@ export default async function UseCasePage({ params }: Props) {
           </section>
         )}
 
-        <div className="prose max-w-none mb-12">
-          <PortableText value={useCase.content} />
-        </div>
+        <PortableTextRenderer value={useCase.content} className="prose max-w-none mb-12" />
 
         {useCase.relatedContent && <RelatedContent content={useCase.relatedContent} />}
       </article>

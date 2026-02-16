@@ -1,6 +1,7 @@
 import Link from "next/link"
-import { getAllComparisons } from "@/lib/sanity"
+import { getAllComparisons, getAllProducts } from "@/lib/sanity"
 import FeaturedCard from "@/components/featured-card"
+import ProductComparisonTool from "@/components/product-comparison-tool"
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
@@ -9,7 +10,7 @@ export const metadata: Metadata = {
 }
 
 export default async function ComparisonsPage() {
-  const comparisons = await getAllComparisons()
+  const [comparisons, products] = await Promise.all([getAllComparisons(), getAllProducts()])
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -30,23 +31,28 @@ export default async function ComparisonsPage() {
         </p>
       </div>
 
+      {products && products.length >= 2 && <ProductComparisonTool products={products} />}
+
       {comparisons.length === 0 ? (
         <div className="text-center py-12 bg-gray-50 rounded-lg">
           <p className="text-xl text-gray-600">No comparisons found</p>
           <p className="mt-2 text-gray-500">Check back soon for new product comparisons</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {comparisons.map((comparison) => (
-            <FeaturedCard
-              key={comparison._id}
-              title={comparison.title}
-              description={comparison.excerpt}
-              image={comparison.mainImage}
-              slug={`/compare/${comparison.slug}`}
-            />
-          ))}
-        </div>
+        <>
+          <h2 className="text-2xl font-bold mb-6">Detailed Comparison Articles</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {comparisons.map((comparison) => (
+              <FeaturedCard
+                key={comparison._id}
+                title={comparison.title}
+                description={comparison.excerpt}
+                image={comparison.mainImage}
+                slug={`/compare/${comparison.slug}`}
+              />
+            ))}
+          </div>
+        </>
       )}
     </div>
   )
