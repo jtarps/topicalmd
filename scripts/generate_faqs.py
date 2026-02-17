@@ -11,6 +11,8 @@ from dotenv import load_dotenv
 from openai import OpenAI
 from slugify import slugify
 
+from markdown_to_portable_text import markdown_to_portable_text
+
 load_dotenv()
 client = OpenAI()
 
@@ -60,7 +62,9 @@ Write a thorough answer that includes:
 4. **Related Considerations**: Any important caveats, when to see a doctor, or related topics
 5. **Sources**: 2-3 real medical sources relevant to this topic (provide source name and general reference)
 
-The answer should be medically accurate, helpful, and optimized for Google's featured snippets. Use short paragraphs and clear headings. Do NOT start with the question repeated."""
+The answer should be medically accurate, helpful, and optimized for Google's featured snippets. Use short paragraphs and clear headings. Do NOT start with the question repeated.
+
+FORMATTING: Use standard Markdown throughout: ## for sections, ### for subsections, - for bullet lists, 1. for numbered lists, **bold** for emphasis."""
 
 
 def push_faq_to_sanity(question, content, prompt):
@@ -97,16 +101,7 @@ def push_faq_to_sanity(question, content, prompt):
                     "slug": {"_type": "slug", "current": slug},
                     "publishedAt": datetime.utcnow().isoformat() + "Z",
                     "excerpt": excerpt,
-                    "answer": [
-                        {
-                            "_type": "block",
-                            "_key": f"block-{i}",
-                            "style": "normal",
-                            "children": [{"_type": "span", "_key": f"span-{i}", "text": para, "marks": []}],
-                        }
-                        for i, para in enumerate(content.split("\n\n"))
-                        if para.strip()
-                    ],
+                    "answer": markdown_to_portable_text(content),
                     "sources": sources[:5] if sources else [],
                 }
             }

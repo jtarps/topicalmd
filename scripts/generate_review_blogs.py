@@ -12,6 +12,8 @@ from dotenv import load_dotenv
 from openai import OpenAI
 from slugify import slugify
 
+from markdown_to_portable_text import markdown_to_portable_text
+
 load_dotenv()
 client = OpenAI()
 
@@ -62,7 +64,9 @@ Write a comprehensive review with the following structure:
 13. **FAQ** - 3-4 common questions about this product
 14. **Medical Disclaimer** - Standard disclaimer about consulting healthcare providers
 
-Include E-E-A-T signals: cite specific studies or medical guidelines where possible. Use short, scannable paragraphs. Do NOT copy any content from other sites."""
+Include E-E-A-T signals: cite specific studies or medical guidelines where possible. Use short, scannable paragraphs. Do NOT copy any content from other sites.
+
+FORMATTING: Use standard Markdown throughout: ## for sections, ### for subsections, - for bullet lists, 1. for numbered lists, **bold** for emphasis."""
 
 
 def extract_title(content):
@@ -143,16 +147,7 @@ def push_review_to_sanity(product, content, prompt):
                     "product": {"_type": "reference", "_ref": product_id},
                     "pros": pros,
                     "cons": cons,
-                    "content": [
-                        {
-                            "_type": "block",
-                            "_key": f"block-{i}",
-                            "style": "normal",
-                            "children": [{"_type": "span", "_key": f"span-{i}", "text": para, "marks": []}],
-                        }
-                        for i, para in enumerate(content.split("\n\n"))
-                        if para.strip()
-                    ],
+                    "content": markdown_to_portable_text(content),
                     "generatedContent": content,
                     "sourcePrompt": prompt[:500],
                     "sourceModel": "gpt-4o",

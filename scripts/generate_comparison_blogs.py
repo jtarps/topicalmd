@@ -24,6 +24,7 @@ from slugify import slugify
 # Import affiliate manager
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from affiliate_manager import AffiliateProductManager
+from markdown_to_portable_text import markdown_to_portable_text
 
 load_dotenv()
 client = OpenAI()
@@ -106,7 +107,9 @@ Structure the blog post with the following:
 7. Final Verdict
 8. Medical Disclaimer
 
-Use a helpful, unbiased tone similar to Healthline or Verywell Health. Avoid copying the bullet points verbatim. Write short, scannable paragraphs and avoid fluff."""
+Use a helpful, unbiased tone similar to Healthline or Verywell Health. Avoid copying the bullet points verbatim. Write short, scannable paragraphs and avoid fluff.
+
+FORMATTING: Use standard Markdown throughout: ## for sections, ### for subsections, - for bullet lists, 1. for numbered lists, **bold** for emphasis."""
 
 # Output folder
 output_dir = "generated_blogs"
@@ -247,34 +250,10 @@ def push_to_sanity(title, content, slug, prompt, pair):
                     "_id": f"comparison-{slug}",
                     "title": title,
                     "slug": { "_type": "slug", "current": slug },
-                    "excerpt": lines[2].strip() if len(lines) > 2 else "",
-                    "introduction": [
-                        {
-                            "_type": "block",
-                            "style": "normal",
-                            "children": [
-                                {
-                                    "_type": "span",
-                                    "text": lines[2].strip() if len(lines) > 2 else "",
-                                    "marks": []
-                                }
-                            ]
-                        }
-                    ],
+                    "excerpt": next((l.strip() for l in lines if l.strip() and not l.strip().startswith("#") and len(l.strip()) > 30), f"A comparison of {pair['product_a']['product_name']} and {pair['product_b']['product_name']}.")[:300],
+                    "introduction": markdown_to_portable_text(next((l.strip() for l in lines if l.strip() and not l.strip().startswith("#") and len(l.strip()) > 30), "")),
                     "products": products,
-                    "content": [
-                        {
-                            "_type": "block",
-                            "style": "normal",
-                            "children": [
-                                {
-                                    "_type": "span",
-                                    "text": content,
-                                    "marks": []
-                                }
-                            ]
-                        }
-                    ],
+                    "content": markdown_to_portable_text(content),
                     "sourcePrompt": prompt,
                     "sourceModel": "gpt-4o",
                     "publishedAt": datetime.utcnow().isoformat() + "Z"
@@ -314,8 +293,22 @@ for i, pair in enumerate(comparisons):
 
         # Extract title and slug, then push to Sanity
         lines = blog_content.splitlines()
-        title_line = next((line for line in lines if line.lower().startswith("1. title:")), "Untitled Blog")
-        title = title_line.replace("1. Title:", "").replace("Title:", "").strip().strip('"').strip()
+        title = None
+        for line in lines:
+            cleaned = line.strip().lstrip("#").strip()
+            if not cleaned or len(cleaned) < 10:
+                continue
+            cleaned = cleaned.replace("**", "").strip()
+            # Handle "1. Title: ..." format
+            if cleaned.lower().startswith(("1. title:", "title:")):
+                title = cleaned.split(":", 1)[1].strip().strip('"')
+                break
+            # Otherwise use first substantial heading/line as title
+            if not cleaned.lower().startswith(("1.", "2.", "3.")):
+                title = cleaned
+                break
+        if not title:
+            title = f"{pair['product_a']['product_name']} vs {pair['product_b']['product_name']}"
         slug = slugify(title)
 
         print(f"Pushing: {pair['product_a']['product_name']} vs {pair['product_b']['product_name']}")

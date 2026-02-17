@@ -1,0 +1,69 @@
+name: Content Pipeline
+
+on:
+  schedule:
+    # Tuesday and Friday at 10:00 UTC
+    - cron: '0 10 * * 2,5'
+  workflow_dispatch:
+    inputs:
+      max_articles:
+        description: 'Maximum articles to generate'
+        required: false
+        default: '3'
+        type: string
+      domain:
+        description: 'Domain filter'
+        required: false
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - joint_pain
+          - muscle_pain
+          - product_review
+      dry_run:
+        description: 'Dry run (no Sanity push)'
+        required: false
+        default: false
+        type: boolean
+
+jobs:
+  generate-content:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run content pipeline
+        working-directory: .
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          SANITY_PROJECT_ID: ${{ secrets.SANITY_PROJECT_ID }}
+          SANITY_DATASET: ${{ secrets.SANITY_DATASET }}
+          SANITY_API_TOKEN: ${{ secrets.SANITY_API_TOKEN }}
+        run: |
+          ARGS="--max-articles=${{ inputs.max_articles || '3' }}"
+          ARGS="$ARGS --domain=${{ inputs.domain || 'all' }}"
+          if [ "${{ inputs.dry_run }}" = "true" ]; then
+            ARGS="$ARGS --dry-run"
+          fi
+          python -m scripts.pipeline.runner $ARGS --verbose 2>&1 | tee pipeline-output.log
+
+      - name: Upload run logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pipeline-logs-${{ github.run_number }}
+          path: pipeline-output.log
+          retention-days: 30

@@ -12,6 +12,8 @@ from dotenv import load_dotenv
 from openai import OpenAI
 from slugify import slugify
 
+from markdown_to_portable_text import markdown_to_portable_text
+
 load_dotenv()
 client = OpenAI()
 
@@ -137,7 +139,9 @@ Write a comprehensive guide with the following structure:
 9. **FAQ**: 4-5 frequently asked questions about topical treatments for {use_case['condition']}
 10. **Medical Disclaimer**
 
-Include E-E-A-T signals throughout. Mention HSA/FSA eligibility where applicable. Use rel="sponsored" notes for product links. Do NOT fabricate clinical trial data."""
+Include E-E-A-T signals throughout. Mention HSA/FSA eligibility where applicable. Use rel="sponsored" notes for product links. Do NOT fabricate clinical trial data.
+
+FORMATTING: Use standard Markdown throughout: ## for sections, ### for subsections, - for bullet lists, 1. for numbered lists, **bold** for emphasis."""
 
 
 def push_to_sanity(use_case, content, prompt):
@@ -163,24 +167,8 @@ def push_to_sanity(use_case, content, prompt):
                     "author": "TopicalMD Editorial Team",
                     "metaTitle": f"Best Topical Creams for {use_case['condition']} (2025) | TopicalMD",
                     "metaDescription": excerpt[:160],
-                    "introduction": [
-                        {
-                            "_type": "block",
-                            "_key": "intro-0",
-                            "style": "normal",
-                            "children": [{"_type": "span", "_key": "s-intro-0", "text": intro_text, "marks": []}],
-                        }
-                    ],
-                    "content": [
-                        {
-                            "_type": "block",
-                            "_key": f"block-{i}",
-                            "style": "normal",
-                            "children": [{"_type": "span", "_key": f"span-{i}", "text": para, "marks": []}],
-                        }
-                        for i, para in enumerate(content.split("\n\n"))
-                        if para.strip()
-                    ],
+                    "introduction": markdown_to_portable_text(intro_text),
+                    "content": markdown_to_portable_text(content),
                 }
             }
         ]

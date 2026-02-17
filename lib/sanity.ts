@@ -93,6 +93,8 @@ export async function getReview(slug: string) {
         },
         pros,
         cons,
+        helpfulYes,
+        helpfulNo,
         "relatedContent": *[_type in ["review", "useCase", "comparison", "ingredient", "faq"] && references(^._id)] {
           _id,
           title,

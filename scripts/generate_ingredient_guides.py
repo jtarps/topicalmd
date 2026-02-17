@@ -11,6 +11,8 @@ from dotenv import load_dotenv
 from openai import OpenAI
 from slugify import slugify
 
+from markdown_to_portable_text import markdown_to_portable_text
+
 load_dotenv()
 client = OpenAI()
 
@@ -62,7 +64,9 @@ Write a comprehensive ingredient guide with:
 9. **Comparison to Other Ingredients**: How it compares to alternatives in the same category
 10. **FAQ**: 3-4 common questions
 
-Be evidence-based and cite medical sources. Include E-E-A-T signals. Avoid health claims that aren't supported by evidence."""
+Be evidence-based and cite medical sources. Include E-E-A-T signals. Avoid health claims that aren't supported by evidence.
+
+FORMATTING: Use standard Markdown throughout: ## for sections, ### for subsections, - for bullet lists, 1. for numbered lists, **bold** for emphasis."""
 
 
 def push_ingredient_to_sanity(ingredient, content, prompt):
@@ -87,16 +91,7 @@ def push_ingredient_to_sanity(ingredient, content, prompt):
                     "category": ingredient["category"],
                     "benefits": [],
                     "sideEffects": [],
-                    "content": [
-                        {
-                            "_type": "block",
-                            "_key": f"block-{i}",
-                            "style": "normal",
-                            "children": [{"_type": "span", "_key": f"span-{i}", "text": para, "marks": []}],
-                        }
-                        for i, para in enumerate(content.split("\n\n"))
-                        if para.strip()
-                    ],
+                    "content": markdown_to_portable_text(content),
                 }
             }
         ]

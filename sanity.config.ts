@@ -7,8 +7,8 @@ export default defineConfig({
   name: "default",
   title: "TopicalMD",
 
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || "",
-  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || "production",
+  projectId: "y4u80wnd",
+  dataset: "production",
 
   plugins: [structureTool(), visionTool()],
 

@@ -7,6 +7,7 @@ import type { Metadata } from "next"
 import RatingStars from "@/components/rating-stars"
 import ProductInfo from "@/components/product-info"
 import RelatedContent from "@/components/related-content"
+import ArticleRating from "@/components/article-rating"
 import { AlertTriangle, CheckCircle, XCircle, Info } from "lucide-react"
 import Link from "next/link"
 
@@ -135,6 +136,14 @@ export default async function ReviewPage({ params }: Props) {
                   </p>
                 </div>
               </div>
+            </div>
+
+            <div className="mt-8">
+              <ArticleRating
+                documentId={review._id}
+                initialYes={review.helpfulYes || 0}
+                initialNo={review.helpfulNo || 0}
+              />
             </div>
           </div>
 

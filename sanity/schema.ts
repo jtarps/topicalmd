@@ -103,6 +103,33 @@ const review = {
       type: "array",
       of: [{ type: "string" }],
     },
+    {
+      name: "helpfulYes",
+      title: "Helpful — Yes",
+      type: "number",
+      description: "Number of readers who found this article helpful",
+      initialValue: 0,
+    },
+    {
+      name: "helpfulNo",
+      title: "Helpful — No",
+      type: "number",
+      description: "Number of readers who did not find this article helpful",
+      initialValue: 0,
+    },
+    {
+      name: "confidenceScore",
+      title: "Pipeline Confidence Score",
+      type: "number",
+      description: "Auto-generated quality score (0-100) from the content pipeline",
+      validation: (Rule: any) => Rule.min(0).max(100),
+    },
+    {
+      name: "pipelineVersion",
+      title: "Pipeline Version",
+      type: "string",
+      description: "Version of the content pipeline that generated this document",
+    },
   ],
 }
 
@@ -316,6 +343,19 @@ const useCase = {
       ],
       validation: (Rule: any) => Rule.required(),
     },
+    {
+      name: "confidenceScore",
+      title: "Pipeline Confidence Score",
+      type: "number",
+      description: "Auto-generated quality score (0-100) from the content pipeline",
+      validation: (Rule: any) => Rule.min(0).max(100),
+    },
+    {
+      name: "pipelineVersion",
+      title: "Pipeline Version",
+      type: "string",
+      description: "Version of the content pipeline that generated this document",
+    },
   ],
 }
 
@@ -466,6 +506,19 @@ const comparison = {
       name: "winnerReason",
       title: "Winner Reason",
       type: "text",
+    },
+    {
+      name: "confidenceScore",
+      title: "Pipeline Confidence Score",
+      type: "number",
+      description: "Auto-generated quality score (0-100) from the content pipeline",
+      validation: (Rule: any) => Rule.min(0).max(100),
+    },
+    {
+      name: "pipelineVersion",
+      title: "Pipeline Version",
+      type: "string",
+      description: "Version of the content pipeline that generated this document",
     },
   ],
 }
@@ -632,6 +685,19 @@ const faq = {
           ],
         },
       ],
+    },
+    {
+      name: "confidenceScore",
+      title: "Pipeline Confidence Score",
+      type: "number",
+      description: "Auto-generated quality score (0-100) from the content pipeline",
+      validation: (Rule: any) => Rule.min(0).max(100),
+    },
+    {
+      name: "pipelineVersion",
+      title: "Pipeline Version",
+      type: "string",
+      description: "Version of the content pipeline that generated this document",
     },
   ],
 }
